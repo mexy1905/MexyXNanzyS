@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Nanzystream Giriş</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://assets.goal.com/images/v3/bltc2ca89243b872516/5c7b01455856433f81428332dc6116430b44f526.jpg?auto=webp&format=pjpg&width=3840&quality=60') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    #loginBox {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 36px;
+      color: #00c3ff;
+      text-shadow: 1px 1px 5px black;
+    }
+
+    input {
+      padding: 12px;
+      width: 80%;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #00c3ff, #0047ff);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #ff00e0, #8000ff);
+      box-shadow: 0 0 15px #fff;
+    }
+  </style>
+</head>
+<body>
+  <div id="loginBox">
+    <h1>Nanzystream</h1>
+    <input type="password" id="password" placeholder="Şifreyi girin"><br>
+    <button onclick="login()">Giriş Yap</button>
+  </div>
+
+  <script>
+    const passwordCorrect = "nanzy1905"; // Güncel şifre
+
+    function login() {
+      const pass = document.getElementById('password').value;
+      if(pass === passwordCorrect) {
+        localStorage.setItem("auth", "ok");
+        window.location.href = "stream.html"; // Stream sayfanın adı
+      } else {
+        alert("Şifre yanlış!");
+      }
+    }
+  </script>
+</body>
+</html>
