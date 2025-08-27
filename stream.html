@@ -4,69 +4,50 @@
   <meta charset="UTF-8">
   <title>M&N Stream</title>
   <script src="https://cdn.tutorialjinni.com/hls.js/1.2.1/hls.min.js"></script>
-  <script>
-    // Auth kontrol
-    if (localStorage.getItem("auth") !== "ok") {
-      window.location.href = "index.html";
-    }
-  </script>
   <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; background: radial-gradient(circle at center, #444 0%, #111 100%); color: white; overflow-x: hidden; }
-    #header { font-size: 32px; font-weight: bold; background-color: rgba(0,0,0,0.7); padding: 15px 30px; width: 100%; text-align: center; position: fixed; top: 0; left: 0; z-index: 100; backdrop-filter: blur(8px); box-shadow: 0 0 10px rgba(255,255,255,0.1); animation: fadeInDown 1s ease-out; }
-    #back-button { position: fixed; top: 12px; right: 20px; background-color: #ff4c4c; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; z-index: 101; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: transform 0.2s ease; }
-    #back-button:hover { transform: scale(1.1) rotate(-2deg); background-color: #ff1f1f; }
-    #video-container { margin-top: 140px; width: 80%; max-width: 900px; aspect-ratio: 16/9; background-color: #000; border-radius: 15px; box-shadow: 0 0 30px rgba(0,255,255,0.2); overflow: hidden; animation: zoomIn 1.2s ease-out; position: relative; }
-    video { width: 100%; height: 100%; object-fit: contain; border-radius: 15px; }
-    #channel-buttons { margin-top: 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; animation: fadeIn 2s ease-in; }
-    #channel-buttons button { padding: 12px 25px; font-size: 17px; background: linear-gradient(45deg,#00c3ff,#0047ff); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; box-shadow:0 4px 12px rgba(0,0,0,0.5); transition:all 0.3s ease; }
-    #channel-buttons button:hover { transform: scale(1.15); background: linear-gradient(45deg,#ff00e0,#8000ff); box-shadow:0 0 20px #fff; }
-    @keyframes zoomIn {0%{transform:scale(0.5);opacity:0;}100%{transform:scale(1);opacity:1;}}
-    @keyframes fadeIn {0%{opacity:0;transform:translateY(30px);}100%{opacity:1;transform:translateY(0);}}
-    @keyframes fadeInDown {0%{transform:translateY(-50px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
+    body{margin:0;font-family:'Segoe UI',sans-serif;background:#111;color:white;display:flex;flex-direction:column;align-items:center;}
+    #header{font-size:32px;font-weight:bold;background:rgba(0,0,0,0.7);padding:15px 30px;width:100%;text-align:center;position:fixed;top:0;left:0;z-index:100;}
+    #video-container{margin-top:100px;width:80%;max-width:900px;aspect-ratio:16/9;background:#000;border-radius:15px;overflow:hidden;}
+    video{width:100%;height:100%;object-fit:contain;border-radius:15px;}
+    #channel-buttons{margin-top:40px;display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
+    #channel-buttons button{padding:12px 25px;font-size:17px;background:linear-gradient(45deg,#00c3ff,#0047ff);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;}
+    #channel-buttons button:hover{transform:scale(1.15);background:linear-gradient(45deg,#ff00e0,#8000ff);}
   </style>
 </head>
 <body>
-  <div id="header">
-    M&N Stream
-    <button id="back-button" onclick="window.location.href='index.html'">Geri Dön</button>
-  </div>
+  <div id="header">M&N Stream</div>
 
   <div id="video-container">
     <video id="video" controls autoplay></video>
   </div>
 
   <div id="channel-buttons">
-    <button onclick="switchStream('bein1')">Bein Sports 1</button>
-    <button onclick="switchStream('trtspor')">TRT Spor</button>
+    <button onclick="switchStream('bein1')">Bein 1</button>
+    <button onclick="switchStream('trt')">TRT Spor</button>
   </div>
 
   <script>
     let hls;
-
-    // Kanal linkleri
+    const proxy = "https://cors-anywhere.herokuapp.com/";
     const streams = {
-      // Bein 1 proxy linki ile browser’da çalışacak
-      bein1: 'http://localhost:3000/proxy?url=http://premium-play.org:8000/saidclt201/XmQat4ju/2826',
-      // TRT Spor public HLS
-      trtspor: 'https://tv-trtspor1.medya.trt.com.tr/master.m3u8'
+      bein1: proxy + "https://raw.githubusercontent.com/mexy1905/MexyXNanzyS/refs/heads/main/bein1.m3u8",
+      trt: proxy + "https://tv-trtspor1.medya.trt.com.tr/master.m3u8"
     };
 
-    function switchStream(channel) {
+    function switchStream(channel){
       const video = document.getElementById('video');
-      if(Hls.isSupported()) {
+      if(Hls.isSupported()){
         if(hls) hls.destroy();
         hls = new Hls();
         hls.loadSource(streams[channel]);
         hls.attachMedia(video);
-      } else {
+      }else{
         video.src = streams[channel];
       }
       video.play();
     }
 
-    // Sayfa açılınca ilk kanal
-    window.onload = function() {
+    window.onload = function(){
       switchStream('bein1');
     };
   </script>
