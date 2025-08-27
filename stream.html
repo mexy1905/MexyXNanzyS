@@ -4,28 +4,23 @@
   <meta charset="UTF-8">
   <title>M&N Stream</title>
   <script src="https://cdn.tutorialjinni.com/hls.js/1.2.1/hls.min.js"></script>
-  <script>
-    if (localStorage.getItem("auth") !== "ok") {
-      window.location.href = "index.html";
-    }
-  </script>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; background: radial-gradient(circle at center, #444 0%, #111 100%); color: white; overflow-x: hidden; }
-    #header { font-size: 32px; font-weight: bold; background-color: rgba(0,0,0,0.7); padding: 15px 30px; width: 100%; text-align: center; position: fixed; top: 0; left: 0; z-index: 100; backdrop-filter: blur(8px); box-shadow: 0 0 10px rgba(255,255,255,0.1); animation: fadeInDown 1s ease-out; }
-    #back-button { position: fixed; top: 12px; right: 20px; background-color: #ff4c4c; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; z-index: 101; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: transform 0.2s ease; }
-    #back-button:hover { transform: scale(1.1) rotate(-2deg); background-color: #ff1f1f; }
-    #video-container { margin-top: 140px; width: 80%; max-width: 900px; aspect-ratio: 16/9; background-color: #000; border-radius: 15px; box-shadow: 0 0 30px rgba(0,255,255,0.2); overflow: hidden; animation: zoomIn 1.2s ease-out; position: relative; }
-    video { width: 100%; height: 100%; object-fit: contain; border-radius: 15px; }
-    #channel-buttons { margin-top: 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; animation: fadeIn 2s ease-in; }
-    #channel-buttons button { padding: 12px 25px; font-size: 17px; background: linear-gradient(45deg,#00c3ff,#0047ff); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; box-shadow:0 4px 12px rgba(0,0,0,0.5); transition:all 0.3s ease; }
-    #channel-buttons button:hover { transform: scale(1.15); background: linear-gradient(45deg,#ff00e0,#8000ff); box-shadow:0 0 20px #fff; }
-    @keyframes zoomIn {0%{transform:scale(0.5);opacity:0;}100%{transform:scale(1);opacity:1;}}
-    @keyframes fadeIn {0%{opacity:0;transform:translateY(30px);}100%{opacity:1;transform:translateY(0);}}
-    @keyframes fadeInDown {0%{transform:translateY(-50px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
+    body { margin:0; font-family:'Segoe UI',sans-serif; display:flex; flex-direction:column; align-items:center; background:#111; color:white; }
+    #header { font-size:32px; font-weight:bold; background:rgba(0,0,0,0.7); padding:15px 30px; width:100%; text-align:center; position:fixed; top:0; left:0; z-index:100; backdrop-filter: blur(8px); box-shadow:0 0 10px rgba(255,255,255,0.1); }
+    #back-button { position:fixed; top:12px; right:20px; background:#ff4c4c; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; z-index:101; font-weight:bold; }
+    #video-container { margin-top:100px; width:80%; max-width:900px; aspect-ratio:16/9; background:#000; border-radius:15px; box-shadow:0 0 30px rgba(0,255,255,0.2); overflow:hidden; position:relative; }
+    video { width:100%; height:100%; object-fit:contain; border-radius:15px; }
+    #channel-buttons { margin-top:30px; display:flex; flex-wrap:wrap; justify-content:center; gap:15px; }
+    #channel-buttons button { padding:12px 25px; font-size:17px; background:linear-gradient(45deg,#00c3ff,#0047ff); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; box-shadow:0 4px 12px rgba(0,0,0,0.5); transition:all 0.3s ease; }
+    #channel-buttons button:hover { transform:scale(1.15); background:linear-gradient(45deg,#ff00e0,#8000ff); box-shadow:0 0 20px #fff; }
+    #logo { position:fixed; top:12px; left:20px; width:80px; height:auto; z-index:101; }
   </style>
 </head>
 <body>
+  <!-- Logo -->
+  <img src="logo.png" id="logo" alt="Logo">
+
   <div id="header">
     M&N Stream
     <button id="back-button" onclick="window.location.href='index.html'">Geri Dön</button>
@@ -35,44 +30,47 @@
     <video id="video" controls autoplay></video>
   </div>
 
-  <div id="channel-buttons">
-    <div>
-      <button onclick="switchStream('bein1')">B*in Sports 1</button>
-      <button onclick="switchStream('bein2')">B*in Sports 2</button>
-      <button onclick="switchStream('bein3')">B*in Sports 3</button>
-      <button onclick="switchStream('bein4')">B*in Sports 4</button>
-    </div>
-    <div>
-      <button onclick="switchStream('test')">Trt Spor</button>
-    </div>
-  </div>
+  <div id="channel-buttons"></div>
 
   <script>
-    const streams = {
-      bein1: 'https://raw.githubusercontent.com/mexy1905/AWDAWDAWDADA/refs/heads/main/bein1.m3u8', //
-      bein2: '',
-      bein3: '',
-      bein4: '',
-      Trt: 'https://tv-trtspor1.medya.trt.com.tr/master_720.m3u8'
-    };
+    // Auth check
+    if(localStorage.getItem("auth") !== "ok"){
+      alert("Lütfen giriş yapın!");
+      window.location.href="index.html";
+    }
 
     let hls;
+    const video = document.getElementById('video');
+    const btnContainer = document.getElementById('channel-buttons');
+    let streams = {};
 
-    function switchStream(channel) {
-      const video = document.getElementById('video');
-      if (Hls.isSupported()) {
-        if (hls) hls.destroy();
+    // JSON'dan kanalları yükle ve buton oluştur
+    fetch('channels.json')
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(c => {
+          streams[c.id] = c.url;
+          const btn = document.createElement('button');
+          btn.textContent = c.name;
+          btn.onclick = () => switchStream(c.id);
+          btnContainer.appendChild(btn);
+        });
+        switchStream(data[0].id); // İlk kanalı başlat
+      });
+
+    // HLS Switch fonksiyonu
+    function switchStream(channel){
+      if(!streams[channel]) return;
+      if(Hls.isSupported()){
+        if(hls) hls.destroy();
         hls = new Hls();
         hls.loadSource(streams[channel]);
         hls.attachMedia(video);
       } else {
         video.src = streams[channel];
       }
+      video.play();
     }
-
-    window.onload = function () {
-      switchStream('bein1');
-    };
   </script>
 </body>
 </html>
