@@ -11,23 +11,27 @@
       justify-content: center;
       align-items: center;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://assets.goal.com/images/v3/bltc2ca89243b872516/5c7b01455856433f81428332dc6116430b44f526.jpg?auto=webp&format=pjpg&width=3840&quality=60') no-repeat center center fixed;
+      background: url('https://i2-prod.manchestereveningnews.co.uk/sport/football/article27988038.ece/ALTERNATES/s1200/0_GettyImages-1421048188.jpg') no-repeat center center fixed;
       background-size: cover;
       color: white;
     }
+
     #loginBox {
       background: rgba(0, 0, 0, 0.7);
       padding: 40px;
       border-radius: 15px;
       text-align: center;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 1.5s ease-out;
     }
+
     h1 {
       margin-bottom: 30px;
       font-size: 36px;
       color: #00c3ff;
       text-shadow: 1px 1px 5px black;
     }
+
     input {
       padding: 12px;
       width: 80%;
@@ -36,6 +40,7 @@
       border-radius: 8px;
       font-size: 16px;
     }
+
     button {
       padding: 12px 25px;
       border: none;
@@ -47,10 +52,16 @@
       font-weight: bold;
       transition: all 0.3s ease;
     }
+
     button:hover {
       transform: scale(1.05);
       background: linear-gradient(45deg, #ff00e0, #8000ff);
       box-shadow: 0 0 15px #fff;
+    }
+
+    @keyframes fadeIn {
+      0% {opacity: 0; transform: translateY(-30px);}
+      100% {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
@@ -62,8 +73,7 @@
   </div>
 
   <script>
-    // Buraya güncel şifreyi ekle
-    const passwordCorrect = "nanzy1905";
+    const passwordCorrect = "nanzy1905"; // Güncel şifre
 
     function login() {
       const pass = document.getElementById('password').value;
