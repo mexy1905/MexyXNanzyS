@@ -5,7 +5,7 @@
   <title>M&N Stream</title>
   <script src="https://cdn.tutorialjinni.com/hls.js/1.2.1/hls.min.js"></script>
   <script>
-    // Giriş kontrolü
+    // Auth kontrol
     if (localStorage.getItem("auth") !== "ok") {
       window.location.href = "index.html";
     }
@@ -42,17 +42,20 @@
   </div>
 
   <script>
+    let hls;
+
+    // Kanal linkleri
     const streams = {
-      bein1: 'https://raw.githubusercontent.com/mexy1905/AWDAWDAWDADA/refs/heads/main/bein1.m3u8',
+      // Bein 1 proxy linki ile browser’da çalışacak
+      bein1: 'http://localhost:3000/proxy?url=http://premium-play.org:8000/saidclt201/XmQat4ju/2826',
+      // TRT Spor public HLS
       trtspor: 'https://tv-trtspor1.medya.trt.com.tr/master.m3u8'
     };
 
-    let hls;
-
     function switchStream(channel) {
       const video = document.getElementById('video');
-      if (Hls.isSupported()) {
-        if (hls) hls.destroy();
+      if(Hls.isSupported()) {
+        if(hls) hls.destroy();
         hls = new Hls();
         hls.loadSource(streams[channel]);
         hls.attachMedia(video);
@@ -62,8 +65,8 @@
       video.play();
     }
 
-    // Sayfa yüklenince ilk kanalı başlat
-    window.onload = function () {
+    // Sayfa açılınca ilk kanal
+    window.onload = function() {
       switchStream('bein1');
     };
   </script>
