@@ -72,13 +72,27 @@
   </div>
 
   <div id="channel-buttons">
-    <button onclick="switchStream('bein1')">Bein 1</button>
+    <button onclick="switchStream('trt1')">TRT 1</button>
+    <button onclick="switchStream('trt2')">TRT 2</button>
+    <button onclick="switchStream('trthaber')">TRT Haber</button>
+    <button onclick="switchStream('trtspor1')">TRT Spor 1</button>
+    <button onclick="switchStream('trtspor2')">TRT Spor 2</button>
+    <button onclick="switchStream('trtcocuk')">TRT Çocuk</button>
+    <button onclick="switchStream('trtmuzik')">TRT Müzik</button>
+    <button onclick="switchStream('trtbelgesel')">TRT Belgesel</button>
   </div>
 
   <script>
     let hls;
     const streams = {
-      bein1: "http://livasupport99.xyz:80/live/3817kaan1/LwvTXfRHvx/866986.ts"
+      trt1: "https://tv-trt1.medya.trt.com.tr/master.m3u8",
+      trt2: "https://tv-trt2.medya.trt.com.tr/master.m3u8",
+      trthaber: "https://tv-trthaber.medya.trt.com.tr/master.m3u8",
+      trtspor1: "https://tv-trtspor1.medya.trt.com.tr/master.m3u8",
+      trtspor2: "https://tv-trtspor2.medya.trt.com.tr/master.m3u8",
+      trtcocuk: "https://tv-trtcocuk.medya.trt.com.tr/master.m3u8",
+      trtmuzik: "https://tv-trtmuzik.medya.trt.com.tr/master.m3u8",
+      trtbelgesel: "https://tv-trtbelgesel.medya.trt.com.tr/master.m3u8"
     };
 
     function switchStream(channel){
@@ -95,7 +109,7 @@
     }
 
     window.onload = function(){
-      switchStream('bein1');
+      switchStream('trt1'); // varsayılan kanal TRT 1
     };
   </script>
 </body>
