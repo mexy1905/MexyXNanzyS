@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>M&N Stream</title>
+  <title>After Effects Leak Stream</title>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -76,36 +76,12 @@
       background: linear-gradient(45deg,#ff00e0,#8000ff);
       box-shadow: 0 0 15px white;
     }
-    #match-list {
-      margin: 40px auto;
-      width: 80%;
-      max-width: 700px;
-      background: rgba(0,0,0,0.5);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    #match-list h2 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    #theme-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 50%;
-      background: #fff;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>M&N Stream</h1>
+    <h1>After Effects Leak Stream</h1>
     <div id="logo"></div>
   </header>
 
@@ -114,52 +90,30 @@
   </div>
 
   <div id="controls">
-    <button onclick="switchStream('bein1')">B*in Sports 1</button>
-    <button onclick="switchStream('bein2')">B*in Sports 2</button>
-    <button onclick="switchStream('test')">Test Yayın</button>
+    <button onclick="switchStream('trt1')">TRT 1 (Galatasaray vs Liverpool)</button>
   </div>
-
-  <div id="match-list">
-    <h2>📅 Günün Maçları</h2>
-    <ul>
-      <li>19:00 - Galatasaray vs Fenerbahçe</li>
-      <li>21:45 - Real Madrid vs Barcelona</li>
-    </ul>
-  </div>
-
-  <button id="theme-toggle" onclick="toggleTheme()">🌙</button>
 
   <script>
     const streams = {
-      bein1: "https://example.com/bein1.m3u8",
-      bein2: "https://example.com/bein2.m3u8",
-      test:  "https://tv-trtspor1.medya.trt.com.tr/master_720.m3u8"
+      trt1: "https://tv-trt1-dai.medya.trt.com.tr/master.m3u8"
     };
 
-    let hls;
-    function switchStream(channel) {
-      const video = document.getElementById('video');
-      if (Hls.isSupported()) {
-        if (hls) hls.destroy();
-        hls = new Hls();
-        hls.loadSource(streams[channel]);
-        hls.attachMedia(video);
-      } else {
-        video.src = streams[channel];
-      }
-    }
-    window.onload = () => switchStream('bein1');
+    const video = document.getElementById('video');
 
-    function toggleTheme() {
-      if (document.body.style.background.includes("111")) {
-        document.body.style.background = "radial-gradient(circle at center, #eee 0%, #ccc 100%)";
-        document.body.style.color = "#000";
-      } else {
-        document.body.style.background = "radial-gradient(circle at center, #444 0%, #111 100%)";
-        document.body.style.color = "#fff";
+    function switchStream(channel) {
+      const url = streams[channel];
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
       }
     }
+
+    // Varsayılan yayın: TRT 1
+    switchStream('trt1');
   </script>
 
 </body>
-  </html>
+</html>
