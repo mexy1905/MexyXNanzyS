@@ -32,12 +32,6 @@
       font-size: 28px;
       font-weight: bold;
     }
-    #logo {
-      width: 50px;
-      height: 50px;
-      background: url('https://via.placeholder.com/50') no-repeat center/cover;
-      border-radius: 8px;
-    }
     #video-container {
       margin-top: 120px;
       width: 80%;
@@ -54,67 +48,29 @@
       height: 100%;
       border-radius: 12px;
     }
-    #controls {
-      margin-top: 30px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-    #controls button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      background: linear-gradient(45deg,#00c3ff,#0047ff);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    #controls button:hover {
-      transform: scale(1.1);
-      background: linear-gradient(45deg,#ff00e0,#8000ff);
-      box-shadow: 0 0 15px white;
-    }
   </style>
 </head>
 <body>
 
   <header>
     <h1>M&N Stream</h1>
-    <div id="logo"></div>
   </header>
 
   <div id="video-container">
     <video id="video" controls autoplay></video>
   </div>
 
-  <div id="controls">
-    <button onclick="switchStream('trt1')">TRT 1 (Galatasaray vs Liverpool)</button>
-  </div>
-
   <script>
-    const streams = {
-      trt1_old: "https://tv-trt1-dai.medya.trt.com.tr/master.m3u8",
-      trt1: "https://tv-trt1.medya.trt.com.tr/master.m3u8"
-    };
-
     const video = document.getElementById('video');
+    const url = "https://ddc75c8a6akqr.cloudfront.net/v1/master/80dbfc318ab6b980679b32095ba497236de6d2f9/TRT-1/master.m3u8";
 
-    function switchStream(channelKey) {
-      const url = streams[channelKey];
-      if (!url) return;
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = url;
-      }
+    if(Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(url);
+      hls.attachMedia(video);
+    } else if(video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = url;
     }
-
-    // Varsayılan yayın: yeni TRT 1
-    switchStream('trt1');
   </script>
 
 </body>
