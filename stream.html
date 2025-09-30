@@ -95,13 +95,15 @@
 
   <script>
     const streams = {
-      trt1: "https://tv-trt1-dai.medya.trt.com.tr/master.m3u8"
+      trt1_old: "https://tv-trt1-dai.medya.trt.com.tr/master.m3u8",
+      trt1: "https://tv-trt1.medya.trt.com.tr/master.m3u8"
     };
 
     const video = document.getElementById('video');
 
-    function switchStream(channel) {
-      const url = streams[channel];
+    function switchStream(channelKey) {
+      const url = streams[channelKey];
+      if (!url) return;
       if (Hls.isSupported()) {
         const hls = new Hls();
         hls.loadSource(url);
@@ -111,7 +113,7 @@
       }
     }
 
-    // Varsayılan yayın: TRT 1
+    // Varsayılan yayın: yeni TRT 1
     switchStream('trt1');
   </script>
 
